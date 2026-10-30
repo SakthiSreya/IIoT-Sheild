@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#070d18">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IIoT Shield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="bar-top">
+      <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>IIoT Shield</div>
+      <div class="status"><span class="dot"></span>System online</div>
+    </div>
+    <div class="hero-in">
+      <div class="hero-text">
+        <h1>Zero-trust authentication for industrial devices</h1>
+        <p>Every request is checked against the device's identity, hardware fingerprint and recent behaviour. An LSTM model scores the behaviour, and a policy engine decides to allow, challenge or block.</p>
+        <div class="stats">
+          <div><b>3</b><span>trust signals</span></div>
+          <div><b>10</b><span>readings per check</span></div>
+          <div><b>LSTM</b><span>anomaly model</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 520 380" fill="none">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2dd4bf"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+          </defs>
+          <circle cx="260" cy="190" r="150" stroke="#2c4a75" stroke-dasharray="4 8"/>
+          <circle cx="260" cy="190" r="110" stroke="#2c4a75"/>
+          <g stroke="#3b6aa5" stroke-width="2" stroke-dasharray="6 6">
+            <path d="M120 80 L215 150"/><path d="M110 300 L215 230"/><path d="M410 90 L305 150"/><path d="M420 290 L305 230"/>
+          </g>
+          <path d="M260 70 L345 102 V185 C345 242 308 278 260 300 C212 278 175 242 175 185 V102 Z" fill="url(#g1)"/>
+          <path d="M222 188 l28 28 l52 -56" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#13284a" stroke="#4d7cc0" stroke-width="2">
+            <rect x="70" y="50" width="100" height="62" rx="12"/><rect x="60" y="270" width="100" height="62" rx="12"/>
+            <rect x="360" y="60" width="100" height="62" rx="12"/><rect x="370" y="260" width="100" height="62" rx="12"/>
+          </g>
+          <g fill="#2dd4bf">
+            <circle cx="92" cy="72" r="5"/><circle cx="108" cy="72" r="5"/><circle cx="124" cy="72" r="5"/>
+            <circle cx="410" cy="82" r="22" fill="none" stroke="#2dd4bf" stroke-width="3"/><circle cx="410" cy="82" r="6"/>
+            <circle cx="110" cy="301" r="16" fill="none" stroke="#60a5fa" stroke-width="3"/><circle cx="110" cy="301" r="5" fill="#60a5fa"/>
+          </g>
+          <g stroke="#60a5fa" stroke-width="3" stroke-linecap="round" fill="none">
+            <path d="M92 98 h56"/><path d="M400 300 l20 -20 l24 12"/><circle cx="446" cy="292" r="5"/><path d="M390 306 h30"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="layout">
+    <article class="card">
+      <h2><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg></span>Run a test</h2>
+
+      <label for="device">Device</label>
+      <select id="device"></select>
+      <label for="scenario">Scenario</label>
+      <select id="scenario">
+        <option value="normal">Normal device</option>
+        <option value="fingerprint">Changed device fingerprint</option>
+        <option value="behavior">Suspicious behaviour</option>
+        <option value="unknown">Unknown device</option>
+      </select>
+
+      <div class="preview" id="devicePreview"></div>
+
+      <button id="testBtn">Verify device</button>
+    </article>
+
+    <article class="card verdict" id="decisionCard" data-state="idle">
+      <div class="verdict-head">
+        <h2><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5z"/></svg></span>Zero-trust decision</h2>
+        <span class="chip" id="decision">WAITING</span>
+      </div>
+      <p id="reason" class="reason">Choose a device and scenario, then select Verify device. The decision, risk score and model output appear here.</p>
+
+      <div class="meters">
+        <div class="meter"><div class="m-top"><span>Overall risk</span><strong id="risk">0%</strong></div><div class="bar"><i id="riskBar"></i></div><small>Lower is better</small></div>
+        <div class="meter"><div class="m-top"><span>Fingerprint match</span><strong id="fingerprint">0%</strong></div><div class="bar"><i id="fpBar"></i></div><small>Higher is better</small></div>
+        <div class="meter"><div class="m-top"><span>LSTM anomaly</span><strong id="anomaly">0%</strong></div><div class="bar"><i id="anBar"></i></div><small>Lower is better</small></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="card">
+    <div class="row-head"><h2><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>Security signals</h2><span class="model" id="modelStatus">Checking model…</span></div>
+    <div class="signals">
+      <div class="sig"><div class="sig-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M14 10h4M14 14h4M6 16c.6-1.6 5.4-1.6 6 0"/></svg></div><div><span>Identity</span><strong id="identity">Pending</strong></div></div>
+      <div class="sig"><div class="sig-ic"><svg viewBox="0 0 24 24"><path d="M6 20c0-8 1-14 6-14s6 6 6 12M9 20c0-5 .5-9 3-9s3 4 3 9M12 20v-4M4 12c0-5 3-9 8-9s8 4 8 9"/></svg></div><div><span>Fingerprint</span><strong id="fpSignal">Pending</strong></div></div>
+      <div class="sig"><div class="sig-ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><div><span>Behaviour</span><strong id="behaviorSignal">Pending</strong></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="ico"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h5l5-6M12 12l5 6"/></svg></span>How the system works</h2>
+    <ol class="flow">
+      <li><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M2 8c6-6 14-6 20 0M5 12c4-4 10-4 14 0M8.5 15.5c2-2 5-2 7 0"/><circle cx="12" cy="19" r="1.2"/></svg></div><b>Device connects</b><span>Sends its ID and telemetry</span></li>
+      <li><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M6 20c0-8 1-14 6-14s6 6 6 12M9 20c0-5 .5-9 3-9s3 4 3 9M4 12c0-5 3-9 8-9s8 4 8 9"/></svg></div><b>Fingerprint</b><span>Firmware, MAC, resources</span></li>
+      <li><div class="step-ic"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div><b>LSTM analysis</b><span>Scores 10 recent readings</span></li>
+      <li><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5M3 17l9 5 9-5"/></svg></div><b>Policy engine</b><span>Combines all signals</span></li>
+      <li><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div><b>Decision</b><span>Allow, step-up or block</span></li>
+    </ol>
+  </section>
+
+  <section class="two">
+    <article class="card">
+      <h2><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Recent tests</h2>
+      <ul id="log" class="log"><li class="empty">No tests run yet. Results will be listed here.</li></ul>
+    </article>
+    <article class="card">
+      <h2><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span>What each scenario shows</h2>
+      <dl class="legend">
+        <div><dt><i class="g"></i>Normal device</dt><dd>Matching fingerprint and steady telemetry. Expected result: allow.</dd></div>
+        <div><dt><i class="a"></i>Changed fingerprint</dt><dd>Unfamiliar firmware and MAC prefix, as if hardware was swapped.</dd></div>
+        <div><dt><i class="r"></i>Suspicious behaviour</dt><dd>Failed logins, command bursts and traffic spikes.</dd></div>
+        <div><dt><i class="r"></i>Unknown device</dt><dd>An ID that was never registered with the system.</dd></div>
+      </dl>
+    </article>
+  </section>
+
+</main>
+
+<footer class="foot">IIoT Shield: zero-trust authentication using an LSTM model and device fingerprinting</footer>
+<script src="/app.js"></script>
+</body>
+</html>
